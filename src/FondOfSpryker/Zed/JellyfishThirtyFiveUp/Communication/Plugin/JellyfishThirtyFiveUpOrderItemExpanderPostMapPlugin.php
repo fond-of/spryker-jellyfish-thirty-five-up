@@ -4,6 +4,7 @@ namespace FondOfSpryker\Zed\JellyfishThirtyFiveUp\Communication\Plugin;
 
 use FondOfSpryker\Zed\JellyfishExtension\Dependency\Plugin\JellyfishOrderItemExpanderPostMapPluginInterface;
 use Generated\Shared\Transfer\JellyfishOrderItemTransfer;
+use Generated\Shared\Transfer\JellyfishThirtyFiveUpVendorTransfer;
 use Orm\Zed\Sales\Persistence\SpySalesOrderItem;
 
 class JellyfishThirtyFiveUpOrderItemExpanderPostMapPlugin implements JellyfishOrderItemExpanderPostMapPluginInterface
@@ -18,8 +19,14 @@ class JellyfishThirtyFiveUpOrderItemExpanderPostMapPlugin implements JellyfishOr
         JellyfishOrderItemTransfer $jellyfishOrderItemTransfer,
         SpySalesOrderItem $salesOrderItem
     ): JellyfishOrderItemTransfer {
+        if ($salesOrderItem->getVendorSku() === null){
+            return $jellyfishOrderItemTransfer;
+        }
+
+        $vendor = (new JellyfishThirtyFiveUpVendorTransfer())
+            ->setName($salesOrderItem->getVendor())
+            ->setSku($salesOrderItem->getVendorSku());
         return $jellyfishOrderItemTransfer
-            ->setVendor($salesOrderItem->getVendor())
-            ->setVendorSku($salesOrderItem->getVendorSku());
+            ->setVendor($vendor);
     }
 }
