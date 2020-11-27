@@ -19,13 +19,14 @@ class JellyfishThirtyFiveUpOrderItemExpanderPostMapPlugin implements JellyfishOr
         JellyfishOrderItemTransfer $jellyfishOrderItemTransfer,
         SpySalesOrderItem $salesOrderItem
     ): JellyfishOrderItemTransfer {
-        if ($salesOrderItem->getVendorSku() === null){
+        if ($salesOrderItem->getVendorSku() === null) {
             return $jellyfishOrderItemTransfer;
         }
 
         $vendor = (new JellyfishThirtyFiveUpVendorTransfer())
             ->setName($salesOrderItem->getVendor())
             ->setSku($salesOrderItem->getVendorSku());
+
         return $jellyfishOrderItemTransfer
             ->setVendor($vendor);
     }
